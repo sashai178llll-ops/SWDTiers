@@ -1,12 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SWD Tiers</title>
+
 <style>
 :root{
-  --bg:#000000;        /* starting color for gradient */
-  --bg-end:#ffffff;    /* ending color for gradient */
-  --card:#141a3a;
+  --bg-start:#000000;        /* gradient start */
+  --bg-end:#ffffff;          /* gradient end */
+  --card-bg:#2c2c2c;         /* card background for contrast */
   --accent:#6f7cff;
-  --text:#e9ecff;
-  --muted:#9aa0c2;
-  --btn-bg:#333333;    /* dark gray buttons */
+  --text:#ffffff;
+  --btn-bg:#333333;           /* dark gray buttons */
 }
 
 *{box-sizing:border-box}
@@ -14,7 +20,7 @@
 body{
   margin:0;
   font-family:system-ui,sans-serif;
-  background: linear-gradient(to bottom, var(--bg), var(--bg-end));
+  background: linear-gradient(to bottom, var(--bg-start), var(--bg-end));
   color:var(--text);
 }
 
@@ -30,7 +36,7 @@ header h1{
 }
 
 header p{
-  opacity:.7;
+  opacity:.8;
   margin-top:6px;
   color:#222;
 }
@@ -59,7 +65,7 @@ header p{
 }
 
 .card{
-  background:linear-gradient(160deg,#1b2258,#0c1028);
+  background: var(--card-bg);
   border-radius:18px;
   padding:20px;
   cursor:pointer;
@@ -93,7 +99,7 @@ header p{
   padding:5px 11px;
   border-radius:999px;
   font-size:12px;
-  background:#1b1b1b; /* slightly darker gray for pill buttons */
+  background:#1b1b1b; 
   color:white;
 }
 
@@ -110,7 +116,7 @@ header p{
 .modal.active{display:flex}
 
 .modal-box{
-  background:#1a1a1a; /* dark modal background */
+  background:#1a1a1a;
   border-radius:20px;
   padding:24px;
   width:90%;
@@ -134,7 +140,7 @@ header p{
   letter-spacing: 0.5px;
   color: #eef0ff;
   text-decoration: none;
-  background: var(--btn-bg); /* dark gray button */
+  background: var(--btn-bg);
   box-shadow:
     0 0 12px rgba(0,0,0,0.6),
     0 8px 24px rgba(0,0,0,0.7);
@@ -154,4 +160,109 @@ header p{
 }
 
 </style>
+</head>
 
+<body>
+
+<header>
+  <h1>SWD Tiers</h1>
+  <p>A normal Minecraft tier list made for fun</p>
+  <a href="https://discord.gg/MXjkjzWRvd" target="_blank" class="discord-btn">
+    Join the SWD Discord
+  </a>
+
+  <div class="search">
+    <input id="search" placeholder="Search player...">
+  </div>
+</header>
+
+<div class="grid" id="grid"></div>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <span class="close" onclick="closeModal()">✕</span>
+    <h2 id="m-name"></h2>
+    <p id="m-score"></p>
+    <div id="m-tests"></div>
+  </div>
+</div>
+
+<script>
+// tier → points
+const tierPoints={
+  HT1:7,HT2:6,HT3:4,HT4:3,HT5:2,
+  LT1:6.9,LT2:5,LT3:3,LT4:2,LT5:1
+};
+
+function normalize(t){
+  return t.toUpperCase().replace("→","-").replace(/\s/g,"");
+}
+
+function points(t){
+  const n=normalize(t);
+  if(!n.includes("-")) return tierPoints[n] ?? 0;
+  const [a,b]=n.split("-");
+  return Math.round(((tierPoints[a]||0)+(tierPoints[b]||0))/2);
+}
+
+// only SadbX and 432Q
+const players=[
+ {name:"SadbX",tests:[
+   {mode:"Mace",tier:"LT3"},
+   {mode:"Sword",tier:"HT4"}
+ ]},
+ {name:"432Q",tests:[
+   {mode:"Crystal",tier:"LT3"},
+   {mode:"Sword",tier:"LT4"}
+ ]}
+];
+
+// calculate total points
+players.forEach(p=>{
+  p.total=p.tests.reduce((s,t)=>s+points(t.tier),0);
+});
+
+const grid=document.getElementById("grid");
+
+function render(list){
+  grid.innerHTML="";
+  list.forEach(p=>{
+    const c=document.createElement("div");
+    c.className="card";
+    c.innerHTML=`
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <img src="https://mc-heads.net/avatar/${p.name}" alt="${p.name}" style="width:50px;height:50px;border-radius:50%;">
+        <h3 style="margin:0;color:white;">${p.name}</h3>
+      </div>
+      <div class="score">${p.total} pts</div>
+      <div class="pills">
+        ${p.tests.map(t=>`<span class="pill">${t.mode} · ${t.tier}</span>`).join("")}
+      </div>
+    `;
+    c.onclick=()=>openModal(p);
+    grid.appendChild(c);
+  });
+}
+
+render(players);
+
+document.getElementById("search").oninput=e=>{
+  const q=e.target.value.toLowerCase();
+  render(players.filter(p=>p.name.toLowerCase().includes(q)));
+};
+
+function openModal(p){
+  document.getElementById("modal").classList.add("active");
+  document.getElementById("m-name").innerText=p.name;
+  document.getElementById("m-score").innerText=`Total: ${p.total} points`;
+  document.getElementById("m-tests").innerHTML=
+    p.tests.map(t=>`<p><b>${t.mode}</b> — ${t.tier} (${points(t.tier)} pts)</p>`).join("");
+}
+
+function closeModal(){
+  document.getElementById("modal").classList.remove("active");
+}
+</script>
+
+</body>
+</html>
