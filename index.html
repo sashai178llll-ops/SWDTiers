@@ -7,7 +7,7 @@
 
 <style>
 :root{
-  --card-bg:#2c2c2c;
+  --card-bg:#1c1c1c;
   --text-light:#ffffff;
   --btn-bg:#333333;
   --accent:#ffffff; /* points white */
@@ -19,11 +19,25 @@ html, body {
   margin:0;
   height:100%;
   font-family: system-ui, sans-serif;
-  /* Smooth ombre from black to gray to white, midpoint near middle */
-  background: linear-gradient(to bottom, #000000 0%, #555555 50%, #ffffff 100%);
+  background-color: #000000; /* pure black */
   color: var(--text-light);
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  /* white trim lines (diagonal for style) */
+  background-image:
+    repeating-linear-gradient(
+      135deg,
+      rgba(255,255,255,0.05),
+      rgba(255,255,255,0.05) 1px,
+      transparent 1px,
+      transparent 20px
+    ),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.05),
+      rgba(255,255,255,0.05) 1px,
+      transparent 1px,
+      transparent 20px
+    );
+  background-size: cover;
 }
 
 header{
@@ -35,6 +49,7 @@ header h1{
   font-size:3rem;
   margin:0;
   color:white;
+  letter-spacing: 1px;
 }
 
 .search{
@@ -66,11 +81,12 @@ header h1{
   padding:16px;
   box-shadow:0 10px 25px rgba(0,0,0,0.6);
   transition:transform 0.25s,box-shadow 0.25s;
+  border: 2px solid #ffffff10; /* subtle white border for trim feel */
 }
 
 .card:hover{
   transform:translateY(-6px);
-  box-shadow:0 0 30px rgba(111,124,255,0.5);
+  box-shadow:0 0 30px rgba(255,255,255,0.2);
 }
 
 .card-title {
@@ -109,7 +125,7 @@ header h1{
   padding:6px 12px;
   border-radius:999px;
   font-size:13px;
-  background:#1b1b1b;
+  background:#333333;
   color:white;
 }
 
