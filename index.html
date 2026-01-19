@@ -256,10 +256,64 @@
       color: var(--text);
     }
 
+    /* ────────────────────────────────────────────────
+       Floating Discord Button (Dark / Red Neon Theme)
+    ──────────────────────────────────────────────── */
+    #discord-btn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 900;
+      width: 68px;
+      height: 68px;
+      background: #0f0f12;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+      border: 2px solid #1e1e24;
+      transition: all 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    #discord-btn:hover {
+      transform: translateY(-12px) scale(1.14);
+      border: 2px solid #ff2d55;
+      box-shadow: 
+        0 0 0 8px rgba(255, 45, 85, 0.28),
+        0 25px 60px rgba(255, 45, 85, 0.4),
+        inset 0 0 16px rgba(255, 45, 85, 0.22);
+      background: linear-gradient(145deg, #111114, #1a1a20);
+    }
+
+    #discord-btn svg {
+      width: 44px;
+      height: 44px;
+      filter: drop-shadow(0 3px 8px rgba(0,0,0,0.6));
+      transition: all 0.4s ease;
+    }
+
+    #discord-btn:hover svg {
+      transform: scale(1.18) rotate(8deg);
+      filter: drop-shadow(0 6px 20px rgba(255,45,85,0.7));
+    }
+
     @media (max-width: 500px) {
       header { padding-top: 2.2rem; }
       .grid { padding: 0 1rem 3rem; gap: 1.3rem; }
       .card { padding: 1.4rem; }
+      #discord-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+      }
+      #discord-btn svg {
+        width: 38px;
+        height: 38px;
+      }
     }
   </style>
 </head>
@@ -283,11 +337,21 @@
   </div>
 </div>
 
-<script>
-// ────────────────────────────────────────────────
-// Your existing JavaScript remains unchanged
-// ────────────────────────────────────────────────
+<!-- Floating Discord Button -->
+<a 
+  href="https://discord.gg/YOUR_INVITE_CODE_HERE" 
+  target="_blank" 
+  rel="noopener noreferrer"
+  id="discord-btn"
+  title="Join SWD Discord"
+>
+  <svg width="48" height="48" viewBox="0 0 127.14 96.36" xmlns="http://www.w3.org/2000/svg">
+    <path fill="#ffffff" d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.25 8.09C2.79 32.65-.09 56.6.003 80.21a113.31 113.31 0 0 0 33.09 16.59 77.06 77.06 0 0 0 6.75-10.27 70.33 70.33 0 0 1-10.81-5.14c.91-.66 1.8-1.34 2.66-2.03a73.51 73.51 0 0 0 62.36 0c.87.69 1.75 1.37 2.66 2.03a70.8 70.8 0 0 1-10.86 5.15 77 77 0 0 0 6.75 10.27 113.3 113.3 0 0 0 33.08-16.59c.11-23.61-2.77-47.56-8.29-72.14zM42.45 65.69C38.49 65.69 35 62.42 35 58.4s3.49-7.29 7.45-7.29 7.45 3.27 7.45 7.29-3.49 7.29-7.45 7.29zm42.24 0c-3.96 0-7.45-3.27-7.45-7.29s3.49-7.29 7.45-7.29 7.45 3.27 7.45 7.29-3.49 7.29-7.45 7.29z"/>
+  </svg>
+</a>
 
+<script>
+// Tier points
 const tierPoints = {
   HT1:7, HT2:6, HT3:4, HT4:3, HT5:2,
   LT1:6.9, LT2:5, LT3:3, LT4:2, LT5:1
@@ -303,9 +367,21 @@ function points(tier) {
 }
 
 const players = [
-  { name: "SadbX", tests: [ {mode:"Mace", tier:"LT3"}, {mode:"Sword", tier:"HT4"} ] },
-  { name: "432Q",  tests: [ {mode:"Crystal",tier:"LT3"}, {mode:"Sword", tier:"LT4"} ] },
-  // add more players here when needed
+  {
+    name: "SadbX",
+    tests: [
+      { mode: "Mace",   tier: "LT3" },
+      { mode: "Sword",  tier: "HT4" }
+    ]
+  },
+  {
+    name: "432Q",
+    tests: [
+      { mode: "Crystal", tier: "LT3" },
+      { mode: "Sword",   tier: "LT4" }
+    ]
+  },
+  // ← add more players here later
 ];
 
 players.forEach(p => {
@@ -319,6 +395,7 @@ function render(list) {
   list.forEach(p => {
     const card = document.createElement("div");
     card.className = "card";
+
     card.innerHTML = `
       <div class="card-title">
         <img src="https://minotar.net/avatar/${p.name}/64" alt="${p.name}" width="56" height="56">
@@ -329,6 +406,7 @@ function render(list) {
         ${p.tests.map(t => `<span class="pill">${t.mode} · ${t.tier}</span>`).join("")}
       </div>
     `;
+
     card.onclick = () => openModal(p);
     grid.appendChild(card);
   });
@@ -338,14 +416,17 @@ render(players);
 
 document.getElementById("search").oninput = e => {
   const q = e.target.value.toLowerCase().trim();
-  render(players.filter(p => p.name.toLowerCase().includes(q)));
+  const filtered = players.filter(p => p.name.toLowerCase().includes(q));
+  render(filtered);
 };
 
 function openModal(p) {
   document.getElementById("modal").classList.add("active");
   document.getElementById("m-name").textContent = p.name;
   document.getElementById("m-score").textContent = `${p.total} pts`;
-  document.getElementById("m-tests").innerHTML = p.tests
+
+  const testsDiv = document.getElementById("m-tests");
+  testsDiv.innerHTML = p.tests
     .map(t => `<p><b>${t.mode}</b> — ${t.tier} <span style="color:#a1a1aa">(${points(t.tier)} pts)</span></p>`)
     .join("");
 }
