@@ -1,175 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SWD Tiers</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SWD Tiers</title>
 
-<style>
-:root{
-  --card-bg:#1c1c1c;
-  --text-light:#ffffff;
-  --btn-bg:#333333;
-  --accent:#ffffff; /* points white */
-}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
 
-*{box-sizing:border-box;}
+  <style>
+    :root {
+      --bg:        #0a0a0c;
+      --card-bg:    #111113;
+      --border:     #222226;
+      --text:       #e5e5e7;
+      --text-muted: #a1a1aa;
+      --accent:     #6366f1;     /* indigo-500 */
+      --accent-glow:#4f46e5;
+      --pill-bg:    #1f1f23;
+      --radius:     16px;
+    }
 
-/* Global fonts */
-body {
-  font-family: 'Roboto', 'Segoe UI', sans-serif;
-  margin:0;
-  height:100%;
-  background-color: #000000; /* black background */
-  color: var(--text-light);
-  /* white trim lines for SWD style */
-  background-image:
-    repeating-linear-gradient(
-      135deg,
-      rgba(255,255,255,0.05),
-      rgba(255,255,255,0.05) 1px,
-      transparent 1px,
-      transparent 20px
-    ),
-    repeating-linear-gradient(
-      45deg,
-      rgba(255,255,255,0.05),
-      rgba(255,255,255,0.05) 1px,
-      transparent 1px,
-      transparent 20px
-    );
-  background-size: cover;
-}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-header{
-  text-align:center;
-  padding:30px 20px 10px;
-}
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
 
-header h1{
-  font-family: 'Oswald', 'Arial Black', sans-serif;
-  font-weight:700;
-  font-size:3rem;
-  margin:0;
-  color:white;
-  letter-spacing: 1px;
-}
+    header {
+      text-align: center;
+      padding: 3.5rem 1rem 2rem;
+    }
 
-.search{
-  max-width:420px;
-  margin:15px auto 30px;
-}
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      font-weight: 700;
+      letter-spacing: 1px;
+      background: linear-gradient(90deg, #c4b5fd, #a78bfa, #c4b5fd);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 0.4rem;
+    }
 
-.search input{
-  width:100%;
-  padding:12px 14px;
-  border-radius:14px;
-  border:none;
-  background:var(--btn-bg);
-  color:white;
-  font-family: 'Roboto', sans-serif;
-  font-size:14px;
-}
+    .search {
+      max-width: 420px;
+      margin: 1.5rem auto;
+    }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-  gap:24px;
-  padding:20px 30px 40px;
-  max-width:900px;
-  margin:auto;
-}
+    .search input {
+      width: 100%;
+      padding: 0.9rem 1.2rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card-bg);
+      color: var(--text);
+      font-size: 1rem;
+      transition: all 0.2s ease;
+    }
 
-.card{
-  background: var(--card-bg);
-  border-radius:20px;
-  padding:20px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.6);
-  transition:transform 0.25s,box-shadow 0.25s;
-  border: 2px solid #ffffff10;
-}
+    .search input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+    }
 
-.card:hover{
-  transform:translateY(-6px);
-  box-shadow:0 0 30px rgba(255,255,255,0.2);
-}
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      padding: 0 1.5rem 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
 
-.card-title {
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:1.4rem;
-  font-weight:bold;
-  color:white;
-  margin:10px 0;
-  gap:10px;
-}
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+    }
 
-.card-title img {
-  width:50px;
-  height:50px;
-  border-radius:50%;
-  border:2px solid white;
-}
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: #444450;
+      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.6),
+                  0 0 20px rgba(99,102,241,0.12);
+    }
 
-.score{
-  text-align:center;
-  font-weight:800;
-  color:white;
-  margin:4px 0 12px;
-}
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
 
-.pills{
-  display:flex;
-  justify-content:center;
-  gap:8px;
-  flex-wrap:wrap;
-}
+    .card-title img {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      border: 2px solid #333338;
+      background: #0f0f11;
+    }
 
-.pill{
-  padding:6px 12px;
-  border-radius:999px;
-  font-size:13px;
-  background:#333333;
-  color:white;
-}
+    .score {
+      font-size: 2.2rem;
+      font-weight: 700;
+      text-align: center;
+      margin: 0.5rem 0 1.25rem;
+      color: white;
+      letter-spacing: -0.5px;
+    }
 
-/* modal styles */
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.75);
-  display:none;
-  align-items:center;
-  justify-content:center;
-}
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: center;
+    }
 
-.modal.active{display:flex}
+    .pill {
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      background: var(--pill-bg);
+      color: var(--text-muted);
+      border: 1px solid #2a2a2f;
+    }
 
-.modal-box{
-  background:#1a1a1a;
-  border-radius:20px;
-  padding:24px;
-  width:90%;
-  max-width:480px;
-  color:white;
-  font-family:'Roboto', sans-serif;
-}
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(4px);
+      display: none;
+      place-items: center;
+      z-index: 1000;
+    }
 
-.close{
-  float:right;
-  cursor:pointer;
-  opacity:.8;
-}
-</style>
+    .modal.active {
+      display: grid;
+    }
 
+    .modal-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      width: 90%;
+      max-width: 500px;
+      position: relative;
+      box-shadow: 0 25px 60px -15px rgba(0,0,0,0.7);
+    }
+
+    .close {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.4rem;
+      font-size: 1.6rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .close:hover {
+      color: white;
+    }
+
+    .modal h2 {
+      font-size: 1.8rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .modal .score {
+      font-size: 1.9rem;
+      margin: 0 0 1.5rem;
+    }
+
+    .modal p {
+      margin: 0.6rem 0;
+      color: var(--text-muted);
+    }
+
+    .modal b {
+      color: var(--text);
+    }
+
+    @media (max-width: 500px) {
+      header { padding-top: 2rem; }
+      .grid { padding: 0 1rem 2.5rem; gap: 1.25rem; }
+      .card { padding: 1.25rem; }
+    }
+  </style>
 </head>
 <body>
 
 <header>
   <h1>SWD Tiers</h1>
   <div class="search">
-    <input id="search" placeholder="Search by name...">
+    <input id="search" placeholder="Search player..." autocomplete="off"/>
   </div>
 </header>
 
@@ -177,84 +223,108 @@ header h1{
 
 <div class="modal" id="modal">
   <div class="modal-box">
-    <span class="close" onclick="closeModal()">✕</span>
+    <span class="close" onclick="closeModal()">×</span>
     <h2 id="m-name"></h2>
-    <p id="m-score"></p>
+    <div class="score" id="m-score"></div>
     <div id="m-tests"></div>
   </div>
 </div>
 
 <script>
-// Tier points
-const tierPoints={
-  HT1:7,HT2:6,HT3:4,HT4:3,HT5:2,
-  LT1:6.9,LT2:5,LT3:3,LT4:2,LT5:1
+// Tier points (unchanged)
+const tierPoints = {
+  HT1:7, HT2:6, HT3:4, HT4:3, HT5:2,
+  LT1:6.9, LT2:5, LT3:3, LT4:2, LT5:1
 };
 
-function normalize(t){ return t.toUpperCase().replace(/\s/g,""); }
-function points(t){
-  const n=normalize(t);
-  if(!n.includes("-")) return tierPoints[n] ?? 0;
-  const [a,b]=n.split("-");
-  return Math.round(((tierPoints[a]||0)+(tierPoints[b]||0))/2);
+function normalize(t) { return t.toUpperCase().replace(/\s/g,""); }
+
+function points(tier) {
+  const n = normalize(tier);
+  if (!n.includes("-")) return tierPoints[n] ?? 0;
+  const [a, b] = n.split("-");
+  return Math.round(((tierPoints[a]||0) + (tierPoints[b]||0)) / 2);
 }
 
-// Only SadbX and 432Q
-const players=[
- {name:"SadbX",tests:[
-   {mode:"Mace",tier:"LT3"},
-   {mode:"Sword",tier:"HT4"}
- ]},
- {name:"432Q",tests:[
-   {mode:"Crystal",tier:"LT3"},
-   {mode:"Sword",tier:"LT4"}
- ]}
+// Data
+const players = [
+  {
+    name: "SadbX",
+    tests: [
+      { mode: "Mace",   tier: "LT3" },
+      { mode: "Sword",  tier: "HT4" }
+    ]
+  },
+  {
+    name: "432Q",
+    tests: [
+      { mode: "Crystal", tier: "LT3" },
+      { mode: "Sword",   tier: "LT4" }
+    ]
+  },
+  // ← add more players here later
 ];
 
-// Calculate totals
-players.forEach(p=>p.total=p.tests.reduce((s,t)=>s+points(t.tier),0));
+players.forEach(p => {
+  p.total = p.tests.reduce((sum, t) => sum + points(t.tier), 0);
+});
 
 const grid = document.getElementById("grid");
 
-function render(list){
+function render(list) {
   grid.innerHTML = "";
-  list.forEach((p)=>{
+  list.forEach(p => {
     const card = document.createElement("div");
     card.className = "card";
 
     card.innerHTML = `
       <div class="card-title">
-        <img src="https://mc-heads.net/avatar/${p.name}" alt="${p.name}">
+        <img src="https://minotar.net/avatar/${p.name}/64" alt="${p.name}" width="56" height="56">
         ${p.name}
       </div>
       <div class="score">${p.total} pts</div>
       <div class="pills">
-        ${p.tests.map(t=>`<span class="pill">${t.mode} · ${t.tier}</span>`).join("")}
+        ${p.tests.map(t => `<span class="pill">${t.mode} · ${t.tier}</span>`).join("")}
       </div>
     `;
 
-    card.onclick = ()=> openModal(p);
+    card.onclick = () => openModal(p);
     grid.appendChild(card);
   });
 }
 
 render(players);
 
-// Search filter
-document.getElementById("search").oninput = e=>{
-  const q = e.target.value.toLowerCase();
-  render(players.filter(p=>p.name.toLowerCase().includes(q)));
+// Live search
+document.getElementById("search").oninput = e => {
+  const q = e.target.value.toLowerCase().trim();
+  const filtered = players.filter(p => p.name.toLowerCase().includes(q));
+  render(filtered);
 };
 
-function openModal(p){
+function openModal(p) {
   document.getElementById("modal").classList.add("active");
-  document.getElementById("m-name").innerText = p.name;
-  document.getElementById("m-score").innerText = `Total: ${p.total} pts`;
-  document.getElementById("m-tests").innerHTML =
-    p.tests.map(t=>`<p><b>${t.mode}</b> — ${t.tier} (${points(t.tier)} pts)</p>`).join("");
+  document.getElementById("m-name").textContent = p.name;
+  document.getElementById("m-score").textContent = `${p.total} pts`;
+
+  const testsDiv = document.getElementById("m-tests");
+  testsDiv.innerHTML = p.tests
+    .map(t => `<p><b>${t.mode}</b> — ${t.tier} <span style="color:#a1a1aa">(${points(t.tier)} pts)</span></p>`)
+    .join("");
 }
 
-function closeModal(){ document.getElementById("modal").classList.remove("active"); }
+function closeModal() {
+  document.getElementById("modal").classList.remove("active");
+}
+
+// Close modal on outside click / ESC
+document.getElementById("modal").onclick = e => {
+  if (e.target === e.currentTarget) closeModal();
+};
+
+window.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeModal();
+});
 </script>
 
 </body>
