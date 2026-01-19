@@ -177,7 +177,7 @@ function points(t){
   return Math.round(((tierPoints[a]||0)+(tierPoints[b]||0))/2);
 }
 
-// Only the two players
+// Only SadbX and 432Q
 const players=[
  {name:"SadbX",tests:[
    {mode:"Mace",tier:"LT3"},
@@ -212,12 +212,16 @@ function render(list){
     card.onclick = ()=> openModal(p);
     grid.appendChild(card);
 
-    // 3D skin viewer using Crafatar
+    // 3D skin viewer: SadbX real skin, 432Q default Steve
+    const skinUrl = p.name === "SadbX"
+      ? `https://crafatar.com/skins/${p.name}?overlay`
+      : "https://crafatar.com/skins/Steve";
+
     const viewer = new skinview3d.SkinViewer({
       canvas: document.createElement("canvas"),
       width: 250,
       height: 180,
-      skin: `https://crafatar.com/skins/${p.name}?overlay`,
+      skin: skinUrl,
       container: document.getElementById(`model-${i}`)
     });
     viewer.camera.position.set(0,0,50);
