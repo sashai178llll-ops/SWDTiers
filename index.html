@@ -10,7 +10,7 @@
   --card-bg:#2c2c2c;
   --text-light:#ffffff;
   --btn-bg:#333333;
-  --accent:#6f7cff;
+  --accent:#ffffff; /* points are white */
 }
 
 *{box-sizing:border-box;}
@@ -19,7 +19,8 @@ html, body {
   margin:0;
   height:100%;
   font-family: system-ui, sans-serif;
-  background: linear-gradient(to bottom, #000000 0%, #ffffff 100%);
+  /* Ombre meeting near middle */
+  background: linear-gradient(to bottom, #000000 0%, #000000 50%, #ffffff 50%, #ffffff 100%);
   color: var(--text-light);
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -72,12 +73,6 @@ header h1{
   box-shadow:0 0 30px rgba(111,124,255,0.5);
 }
 
-.model-container {
-  width:100%;
-  height:180px;
-  margin-bottom:10px;
-}
-
 .card-title {
   display:flex;
   align-items:center;
@@ -86,12 +81,20 @@ header h1{
   font-weight:bold;
   color:white;
   margin:10px 0;
+  gap:10px;
+}
+
+.card-title img {
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  border:2px solid white;
 }
 
 .score{
   text-align:center;
   font-weight:800;
-  color:var(--accent);
+  color:white; /* points white */
   margin:4px 0 12px;
 }
 
@@ -137,9 +140,6 @@ header h1{
   opacity:.8;
 }
 </style>
-
-<!-- 3D skin viewer library -->
-<script src="https://cdn.jsdelivr.net/npm/skinview3d@1.25.0/dist/skinview3d.min.js"></script>
 
 </head>
 <body>
@@ -196,13 +196,15 @@ const grid = document.getElementById("grid");
 
 function render(list){
   grid.innerHTML = "";
-  list.forEach((p,i)=>{
+  list.forEach((p)=>{
     const card = document.createElement("div");
     card.className = "card";
 
     card.innerHTML = `
-      <div id="model-${i}" class="model-container"></div>
-      <div class="card-title">${p.name}</div>
+      <div class="card-title">
+        <img src="https://mc-heads.net/avatar/${p.name}" alt="${p.name}">
+        ${p.name}
+      </div>
       <div class="score">${p.total} pts</div>
       <div class="pills">
         ${p.tests.map(t=>`<span class="pill">${t.mode} · ${t.tier}</span>`).join("")}
@@ -211,21 +213,6 @@ function render(list){
 
     card.onclick = ()=> openModal(p);
     grid.appendChild(card);
-
-    // 3D skin viewer: SadbX real skin, 432Q default Steve
-    const skinUrl = p.name === "SadbX"
-      ? `https://crafatar.com/skins/${p.name}?overlay`
-      : "https://crafatar.com/skins/Steve";
-
-    const viewer = new skinview3d.SkinViewer({
-      canvas: document.createElement("canvas"),
-      width: 250,
-      height: 180,
-      skin: skinUrl,
-      container: document.getElementById(`model-${i}`)
-    });
-    viewer.camera.position.set(0,0,50);
-    viewer.light.directionalLight.intensity = 1.2;
   });
 }
 
