@@ -1,1 +1,1 @@
-A Tierlist made my a funny person
+A Tierlist made by Sad,432Q
