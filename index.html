@@ -7,12 +7,12 @@
 
 <style>
 :root{
-  --bg-start:#000000;        /* gradient start */
-  --bg-end:#ffffff;          /* gradient end */
-  --card-bg:#2c2c2c;         /* card background for contrast */
+  --bg-start:#000000;
+  --bg-end:#ffffff;
+  --card-bg:#2c2c2c;
+  --text-light:#ffffff;
+  --btn-bg:#333333;
   --accent:#6f7cff;
-  --text:#ffffff;
-  --btn-bg:#333333;           /* dark gray buttons */
 }
 
 *{box-sizing:border-box}
@@ -21,29 +21,23 @@ body{
   margin:0;
   font-family:system-ui,sans-serif;
   background: linear-gradient(to bottom, var(--bg-start), var(--bg-end));
-  color:var(--text);
+  color:var(--text-light);
 }
 
 header{
   text-align:center;
-  padding:40px 20px 20px;
+  padding:30px 20px 10px;
 }
 
 header h1{
-  font-size:2.6rem;
+  font-size:3rem;
   margin:0;
-  color:#111; /* darker text for contrast */
-}
-
-header p{
-  opacity:.8;
-  margin-top:6px;
-  color:#222;
+  color:var(--text-light);
 }
 
 .search{
   max-width:420px;
-  margin:25px auto;
+  margin:15px auto 30px;
 }
 
 .search input{
@@ -57,57 +51,70 @@ header p{
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
-  gap:22px;
-  padding:30px;
-  max-width:800px;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:24px;
+  padding:20px 30px 40px;
+  max-width:900px;
   margin:auto;
 }
 
 .card{
   background: var(--card-bg);
-  border-radius:18px;
-  padding:20px;
-  cursor:pointer;
-  box-shadow:0 10px 30px rgba(0,0,0,.6);
-  transition:.25s;
+  border-radius:20px;
+  padding:16px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.6);
+  transition:transform 0.25s,box-shadow 0.25s;
 }
 
 .card:hover{
   transform:translateY(-6px);
-  box-shadow:0 0 30px rgba(111,124,255,.55);
+  box-shadow:0 0 30px rgba(111,124,255,0.5);
 }
 
-.card h3{
-  margin:0;
+.model-container {
+  width:100%;
+  height:180px;
+  margin-bottom:10px;
+}
+
+.card-title {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  justify-content:center;
+  font-size:1.4rem;
+  font-weight:bold;
   color:white;
+  margin:10px 0;
 }
 
 .score{
+  text-align:center;
   font-weight:800;
   color:var(--accent);
-  margin:6px 0 12px;
+  margin:4px 0 12px;
 }
 
 .pills{
   display:flex;
+  justify-content:center;
+  gap:8px;
   flex-wrap:wrap;
-  gap:6px;
 }
 
 .pill{
-  padding:5px 11px;
+  padding:6px 12px;
   border-radius:999px;
-  font-size:12px;
-  background:#1b1b1b; 
+  font-size:13px;
+  background:#1b1b1b;
   color:white;
 }
 
-/* modal */
+/* modal styles */
 .modal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.75);
+  background:rgba(0,0,0,0.75);
   display:none;
   align-items:center;
   justify-content:center;
@@ -120,59 +127,27 @@ header p{
   border-radius:20px;
   padding:24px;
   width:90%;
-  max-width:460px;
+  max-width:480px;
   color:white;
 }
 
 .close{
   float:right;
   cursor:pointer;
-  opacity:.7;
+  opacity:.8;
 }
-
-.discord-btn {
-  display: inline-block;
-  margin: 30px auto;
-  padding: 14px 28px;
-  border-radius: 16px;
-  font-size: 16px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  color: #eef0ff;
-  text-decoration: none;
-  background: var(--btn-bg);
-  box-shadow:
-    0 0 12px rgba(0,0,0,0.6),
-    0 8px 24px rgba(0,0,0,0.7);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
-}
-
-.discord-btn:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow:
-    0 0 22px rgba(0,0,0,0.9),
-    0 12px 32px rgba(0,0,0,0.9);
-  filter: brightness(1.15);
-}
-
-.discord-btn:active {
-  transform: scale(0.98);
-}
-
 </style>
-</head>
 
+<!-- 3D skin viewer library -->
+<script src="https://cdn.jsdelivr.net/npm/skinview3d@1.25.0/dist/skinview3d.min.js"></script>
+
+</head>
 <body>
 
 <header>
   <h1>SWD Tiers</h1>
-  <p>A normal Minecraft tier list made for fun</p>
-  <a href="https://discord.gg/MXjkjzWRvd" target="_blank" class="discord-btn">
-    Join the SWD Discord
-  </a>
-
   <div class="search">
-    <input id="search" placeholder="Search player...">
+    <input id="search" placeholder="Search by name...">
   </div>
 </header>
 
@@ -195,7 +170,7 @@ const tierPoints={
 };
 
 function normalize(t){
-  return t.toUpperCase().replace("→","-").replace(/\s/g,"");
+  return t.toUpperCase().replace(/\s/g,"");
 }
 
 function points(t){
@@ -205,7 +180,7 @@ function points(t){
   return Math.round(((tierPoints[a]||0)+(tierPoints[b]||0))/2);
 }
 
-// only SadbX and 432Q
+// only two players
 const players=[
  {name:"SadbX",tests:[
    {mode:"Mace",tier:"LT3"},
@@ -217,46 +192,55 @@ const players=[
  ]}
 ];
 
-// calculate total points
-players.forEach(p=>{
-  p.total=p.tests.reduce((s,t)=>s+points(t.tier),0);
-});
+players.forEach(p=>p.total=p.tests.reduce((s,t)=>s+points(t.tier),0));
 
-const grid=document.getElementById("grid");
+const grid = document.getElementById("grid");
 
 function render(list){
-  grid.innerHTML="";
-  list.forEach(p=>{
-    const c=document.createElement("div");
-    c.className="card";
-    c.innerHTML=`
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-        <img src="https://mc-heads.net/avatar/${p.name}" alt="${p.name}" style="width:50px;height:50px;border-radius:50%;">
-        <h3 style="margin:0;color:white;">${p.name}</h3>
-      </div>
+  grid.innerHTML = "";
+  list.forEach((p,i) => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <div id="model-${i}" class="model-container"></div>
+      <div class="card-title">${p.name}</div>
       <div class="score">${p.total} pts</div>
       <div class="pills">
         ${p.tests.map(t=>`<span class="pill">${t.mode} · ${t.tier}</span>`).join("")}
       </div>
     `;
-    c.onclick=()=>openModal(p);
-    grid.appendChild(c);
+
+    card.onclick = ()=> openModal(p);
+    grid.appendChild(card);
+
+    // 3D model setup
+    const viewer = new skinview3d.SkinViewer({
+      canvas: document.createElement("canvas"),
+      width: 250,
+      height: 180,
+      skin: `https://skins.minecraft.net/MinecraftSkins/${p.name}.png`,
+      container: document.getElementById(`model-${i}`)
+    });
+    viewer.camera.position.set(0, 0, 50);
+    viewer.light.directionalLight.intensity = 1.2;
   });
 }
 
 render(players);
 
-document.getElementById("search").oninput=e=>{
-  const q=e.target.value.toLowerCase();
+// search filter
+document.getElementById("search").oninput = e => {
+  const q = e.target.value.toLowerCase();
   render(players.filter(p=>p.name.toLowerCase().includes(q)));
 };
 
 function openModal(p){
   document.getElementById("modal").classList.add("active");
-  document.getElementById("m-name").innerText=p.name;
-  document.getElementById("m-score").innerText=`Total: ${p.total} points`;
-  document.getElementById("m-tests").innerHTML=
-    p.tests.map(t=>`<p><b>${t.mode}</b> — ${t.tier} (${points(t.tier)} pts)</p>`).join("");
+  document.getElementById("m-name").innerText = p.name;
+  document.getElementById("m-score").innerText= `Total: ${p.total} pts`;
+  document.getElementById("m-tests").innerHTML = 
+    p.tests.map(t => `<p><b>${t.mode}</b> — ${t.tier} (${points(t.tier)} pts)</p>`).join("");
 }
 
 function closeModal(){
