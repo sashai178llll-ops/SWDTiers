@@ -7,21 +7,22 @@
 
 <style>
 :root{
-  --bg-start:#000000;
-  --bg-end:#ffffff;
   --card-bg:#2c2c2c;
   --text-light:#ffffff;
   --btn-bg:#333333;
   --accent:#6f7cff;
 }
 
-*{box-sizing:border-box}
+*{box-sizing:border-box;}
 
-body{
+html, body {
   margin:0;
-  font-family:system-ui,sans-serif;
-  background: linear-gradient(to bottom, var(--bg-start), var(--bg-end));
-  color:var(--text-light);
+  height:100%;
+  font-family: system-ui, sans-serif;
+  background: linear-gradient(to bottom, #000000 0%, #ffffff 100%);
+  color: var(--text-light);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 header{
@@ -32,7 +33,7 @@ header{
 header h1{
   font-size:3rem;
   margin:0;
-  color:var(--text-light);
+  color:white;
 }
 
 .search{
@@ -80,7 +81,6 @@ header h1{
 .card-title {
   display:flex;
   align-items:center;
-  gap:10px;
   justify-content:center;
   font-size:1.4rem;
   font-weight:bold;
@@ -163,16 +163,13 @@ header h1{
 </div>
 
 <script>
-// tier → points
+// Tier points
 const tierPoints={
   HT1:7,HT2:6,HT3:4,HT4:3,HT5:2,
   LT1:6.9,LT2:5,LT3:3,LT4:2,LT5:1
 };
 
-function normalize(t){
-  return t.toUpperCase().replace(/\s/g,"");
-}
-
+function normalize(t){ return t.toUpperCase().replace(/\s/g,""); }
 function points(t){
   const n=normalize(t);
   if(!n.includes("-")) return tierPoints[n] ?? 0;
@@ -180,7 +177,7 @@ function points(t){
   return Math.round(((tierPoints[a]||0)+(tierPoints[b]||0))/2);
 }
 
-// only two players
+// Only the two players
 const players=[
  {name:"SadbX",tests:[
    {mode:"Mace",tier:"LT3"},
@@ -192,13 +189,14 @@ const players=[
  ]}
 ];
 
+// Calculate totals
 players.forEach(p=>p.total=p.tests.reduce((s,t)=>s+points(t.tier),0));
 
 const grid = document.getElementById("grid");
 
 function render(list){
   grid.innerHTML = "";
-  list.forEach((p,i) => {
+  list.forEach((p,i)=>{
     const card = document.createElement("div");
     card.className = "card";
 
@@ -214,23 +212,23 @@ function render(list){
     card.onclick = ()=> openModal(p);
     grid.appendChild(card);
 
-    // 3D model setup
+    // 3D skin viewer using Crafatar
     const viewer = new skinview3d.SkinViewer({
       canvas: document.createElement("canvas"),
       width: 250,
       height: 180,
-      skin: `https://skins.minecraft.net/MinecraftSkins/${p.name}.png`,
+      skin: `https://crafatar.com/skins/${p.name}?overlay`,
       container: document.getElementById(`model-${i}`)
     });
-    viewer.camera.position.set(0, 0, 50);
+    viewer.camera.position.set(0,0,50);
     viewer.light.directionalLight.intensity = 1.2;
   });
 }
 
 render(players);
 
-// search filter
-document.getElementById("search").oninput = e => {
+// Search filter
+document.getElementById("search").oninput = e=>{
   const q = e.target.value.toLowerCase();
   render(players.filter(p=>p.name.toLowerCase().includes(q)));
 };
@@ -238,14 +236,12 @@ document.getElementById("search").oninput = e => {
 function openModal(p){
   document.getElementById("modal").classList.add("active");
   document.getElementById("m-name").innerText = p.name;
-  document.getElementById("m-score").innerText= `Total: ${p.total} pts`;
-  document.getElementById("m-tests").innerHTML = 
-    p.tests.map(t => `<p><b>${t.mode}</b> — ${t.tier} (${points(t.tier)} pts)</p>`).join("");
+  document.getElementById("m-score").innerText = `Total: ${p.total} pts`;
+  document.getElementById("m-tests").innerHTML =
+    p.tests.map(t=>`<p><b>${t.mode}</b> — ${t.tier} (${points(t.tier)} pts)</p>`).join("");
 }
 
-function closeModal(){
-  document.getElementById("modal").classList.remove("active");
-}
+function closeModal(){ document.getElementById("modal").classList.remove("active"); }
 </script>
 
 </body>
