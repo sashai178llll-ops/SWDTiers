@@ -11,15 +11,15 @@
 
   <style>
     :root {
-      --bg:        #0a0a0c;
-      --card-bg:    #111113;
-      --border:     #222226;
-      --text:       #e5e5e7;
-      --text-muted: #a1a1aa;
-      --accent:     #6366f1;     /* indigo-500 */
-      --accent-glow:#4f46e5;
-      --pill-bg:    #1f1f23;
-      --radius:     16px;
+      --bg:           #050508;
+      --card-bg:      rgba(18, 18, 22, 0.88);
+      --border:       #1e1e24;
+      --text:         #e5e5e7;
+      --text-muted:   #a1a1aa;
+      --accent:       #ff2d55;       /* vivid red for glow */
+      --accent-glow:  #ff1a44;
+      --pill-bg:      rgba(30, 30, 36, 0.7);
+      --radius:       16px;
     }
 
     * {
@@ -30,7 +30,7 @@
 
     body {
       font-family: 'Inter', system-ui, sans-serif;
-      background: var(--bg);
+      background: var(--bg) url('https://www.onlygfx.com/wp-content/uploads/2019/08/6-black-blueprint-background-texture-6.jpg') center/cover fixed;
       color: var(--text);
       min-height: 100vh;
       line-height: 1.5;
@@ -39,17 +39,16 @@
     header {
       text-align: center;
       padding: 3.5rem 1rem 2rem;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.65), transparent 70%);
     }
 
     h1 {
       font-family: 'Orbitron', sans-serif;
       font-size: clamp(2.2rem, 6vw, 3.8rem);
       font-weight: 700;
-      letter-spacing: 1px;
-      background: linear-gradient(90deg, #c4b5fd, #a78bfa, #c4b5fd);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+      letter-spacing: 1.5px;
+      color: #f0f0f5;
+      text-shadow: 0 0 20px rgba(255,45,85,0.4);
       margin-bottom: 0.4rem;
     }
 
@@ -61,25 +60,27 @@
     .search input {
       width: 100%;
       padding: 0.9rem 1.2rem;
-      border: 1px solid var(--border);
+      border: 1px solid #2a2a35;
       border-radius: var(--radius);
-      background: var(--card-bg);
+      background: rgba(20,20,28,0.7);
       color: var(--text);
       font-size: 1rem;
-      transition: all 0.2s ease;
+      backdrop-filter: blur(6px);
+      transition: all 0.25s ease;
     }
 
     .search input:focus {
       outline: none;
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+      box-shadow: 0 0 0 3px rgba(255, 45, 85, 0.22);
+      background: rgba(30,30,38,0.85);
     }
 
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-      padding: 0 1.5rem 3rem;
+      gap: 1.6rem;
+      padding: 0 1.5rem 3.5rem;
       max-width: 1100px;
       margin: 0 auto;
     }
@@ -88,68 +89,116 @@
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 1.5rem;
-      transition: all 0.25s ease;
+      padding: 1.6rem;
+      transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
       cursor: pointer;
-      backdrop-filter: blur(6px);
+      position: relative;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: calc(var(--radius) + 2px);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s ease, box-shadow 0.4s ease;
+      background: linear-gradient(45deg, transparent, var(--accent), transparent);
+      box-shadow: 
+        0 0 20px 4px rgba(255,45,85,0),
+        inset 0 0 12px rgba(255,45,85,0);
+    }
+
+    .card:hover::after {
+      opacity: 0.7;
+      box-shadow: 
+        0 0 35px 10px rgba(255,45,85,0.45),
+        inset 0 0 18px rgba(255,45,85,0.25);
     }
 
     .card:hover {
-      transform: translateY(-6px);
-      border-color: #444450;
-      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.6),
-                  0 0 20px rgba(99,102,241,0.12);
+      transform: translateY(-10px) scale(1.04);
+      border-color: rgba(255,45,85,0.35);
     }
 
     .card-title {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      font-size: 1.4rem;
+      gap: 1.1rem;
+      font-size: 1.45rem;
       font-weight: 600;
-      margin-bottom: 1rem;
+      margin-bottom: 1.1rem;
+      transition: transform 0.35s ease;
+    }
+
+    .card:hover .card-title {
+      transform: translateX(6px);
     }
 
     .card-title img {
-      width: 56px;
-      height: 56px;
-      border-radius: 12px;
-      border: 2px solid #333338;
+      width: 58px;
+      height: 58px;
+      border-radius: 14px;
+      border: 2.5px solid #2a2a30;
       background: #0f0f11;
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .card:hover .card-title img {
+      transform: scale(1.16);
+      border-color: var(--accent);
+      box-shadow: 0 0 24px rgba(255,45,85,0.5);
     }
 
     .score {
-      font-size: 2.2rem;
-      font-weight: 700;
+      font-size: 2.4rem;
+      font-weight: 800;
       text-align: center;
-      margin: 0.5rem 0 1.25rem;
-      color: white;
-      letter-spacing: -0.5px;
+      margin: 0.6rem 0 1.3rem;
+      color: #ffffff;
+      letter-spacing: -1px;
+      transition: all 0.35s ease;
+    }
+
+    .card:hover .score {
+      transform: scale(1.09);
+      color: #ffd0d8;
+      text-shadow: 0 0 18px rgba(255,45,85,0.55);
     }
 
     .pills {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.6rem;
+      gap: 0.7rem;
       justify-content: center;
     }
 
     .pill {
-      padding: 0.4rem 0.9rem;
+      padding: 0.45rem 1rem;
       border-radius: 999px;
-      font-size: 0.82rem;
+      font-size: 0.84rem;
       font-weight: 500;
       background: var(--pill-bg);
       color: var(--text-muted);
       border: 1px solid #2a2a2f;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover .pill {
+      background: rgba(255, 45, 85, 0.14);
+      color: #ffccd5;
+      border-color: rgba(255, 45, 85, 0.4);
+      transform: translateY(-3px);
     }
 
     /* Modal */
     .modal {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.75);
-      backdrop-filter: blur(4px);
+      background: rgba(0,0,0,0.82);
+      backdrop-filter: blur(8px);
       display: none;
       place-items: center;
       z-index: 1000;
@@ -160,42 +209,46 @@
     }
 
     .modal-box {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
+      background: rgba(18,18,22,0.94);
+      border: 1px solid #2a2a35;
       border-radius: var(--radius);
-      padding: 2rem;
+      padding: 2.2rem;
       width: 90%;
-      max-width: 500px;
+      max-width: 520px;
       position: relative;
-      box-shadow: 0 25px 60px -15px rgba(0,0,0,0.7);
+      box-shadow: 0 30px 70px -20px rgba(0,0,0,0.8),
+                  0 0 40px rgba(255,45,85,0.15);
     }
 
     .close {
       position: absolute;
-      top: 1.2rem;
-      right: 1.4rem;
-      font-size: 1.6rem;
+      top: 1.3rem;
+      right: 1.5rem;
+      font-size: 1.8rem;
       color: var(--text-muted);
       cursor: pointer;
-      transition: color 0.2s;
+      transition: all 0.25s;
     }
 
     .close:hover {
-      color: white;
+      color: var(--accent);
+      transform: rotate(90deg);
     }
 
     .modal h2 {
-      font-size: 1.8rem;
-      margin-bottom: 0.8rem;
+      font-size: 1.9rem;
+      margin-bottom: 0.9rem;
+      color: #ffffff;
     }
 
     .modal .score {
-      font-size: 1.9rem;
-      margin: 0 0 1.5rem;
+      font-size: 2.1rem;
+      margin: 0 0 1.6rem;
+      color: #ffccd5;
     }
 
     .modal p {
-      margin: 0.6rem 0;
+      margin: 0.7rem 0;
       color: var(--text-muted);
     }
 
@@ -204,9 +257,9 @@
     }
 
     @media (max-width: 500px) {
-      header { padding-top: 2rem; }
-      .grid { padding: 0 1rem 2.5rem; gap: 1.25rem; }
-      .card { padding: 1.25rem; }
+      header { padding-top: 2.2rem; }
+      .grid { padding: 0 1rem 3rem; gap: 1.3rem; }
+      .card { padding: 1.4rem; }
     }
   </style>
 </head>
@@ -231,7 +284,10 @@
 </div>
 
 <script>
-// Tier points (unchanged)
+// ────────────────────────────────────────────────
+// Your existing JavaScript remains unchanged
+// ────────────────────────────────────────────────
+
 const tierPoints = {
   HT1:7, HT2:6, HT3:4, HT4:3, HT5:2,
   LT1:6.9, LT2:5, LT3:3, LT4:2, LT5:1
@@ -246,23 +302,10 @@ function points(tier) {
   return Math.round(((tierPoints[a]||0) + (tierPoints[b]||0)) / 2);
 }
 
-// Data
 const players = [
-  {
-    name: "SadbX",
-    tests: [
-      { mode: "Mace",   tier: "LT3" },
-      { mode: "Sword",  tier: "HT4" }
-    ]
-  },
-  {
-    name: "432Q",
-    tests: [
-      { mode: "Crystal", tier: "LT3" },
-      { mode: "Sword",   tier: "LT4" }
-    ]
-  },
-  // ← add more players here later
+  { name: "SadbX", tests: [ {mode:"Mace", tier:"LT3"}, {mode:"Sword", tier:"HT4"} ] },
+  { name: "432Q",  tests: [ {mode:"Crystal",tier:"LT3"}, {mode:"Sword", tier:"LT4"} ] },
+  // add more players here when needed
 ];
 
 players.forEach(p => {
@@ -276,7 +319,6 @@ function render(list) {
   list.forEach(p => {
     const card = document.createElement("div");
     card.className = "card";
-
     card.innerHTML = `
       <div class="card-title">
         <img src="https://minotar.net/avatar/${p.name}/64" alt="${p.name}" width="56" height="56">
@@ -287,7 +329,6 @@ function render(list) {
         ${p.tests.map(t => `<span class="pill">${t.mode} · ${t.tier}</span>`).join("")}
       </div>
     `;
-
     card.onclick = () => openModal(p);
     grid.appendChild(card);
   });
@@ -295,20 +336,16 @@ function render(list) {
 
 render(players);
 
-// Live search
 document.getElementById("search").oninput = e => {
   const q = e.target.value.toLowerCase().trim();
-  const filtered = players.filter(p => p.name.toLowerCase().includes(q));
-  render(filtered);
+  render(players.filter(p => p.name.toLowerCase().includes(q)));
 };
 
 function openModal(p) {
   document.getElementById("modal").classList.add("active");
   document.getElementById("m-name").textContent = p.name;
   document.getElementById("m-score").textContent = `${p.total} pts`;
-
-  const testsDiv = document.getElementById("m-tests");
-  testsDiv.innerHTML = p.tests
+  document.getElementById("m-tests").innerHTML = p.tests
     .map(t => `<p><b>${t.mode}</b> — ${t.tier} <span style="color:#a1a1aa">(${points(t.tier)} pts)</span></p>`)
     .join("");
 }
@@ -317,7 +354,6 @@ function closeModal() {
   document.getElementById("modal").classList.remove("active");
 }
 
-// Close modal on outside click / ESC
 document.getElementById("modal").onclick = e => {
   if (e.target === e.currentTarget) closeModal();
 };
