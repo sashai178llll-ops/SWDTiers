@@ -1,2 +1,1 @@
-# SWDTiers
-SWDTiers
+A Tierlist made my a funny person
