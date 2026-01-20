@@ -10,67 +10,66 @@
   --card-bg:#1c1c1c;
   --text-light:#ffffff;
   --btn-bg:#333333;
-  --accent:#ffffff; /* points white */
 }
 
-*{box-sizing:border-box;}
+*{box-sizing:border-box}
 
-/* Global fonts */
-body {
-  font-family: 'Roboto', 'Segoe UI', sans-serif;
+body{
   margin:0;
-  height:100%;
-  background-color: #000000; /* black background */
-  color: var(--text-light);
-  /* white trim lines for SWD style */
-  background-image:
-    repeating-linear-gradient(
-      135deg,
-      rgba(255,255,255,0.05),
-      rgba(255,255,255,0.05) 1px,
-      transparent 1px,
-      transparent 20px
-    ),
-    repeating-linear-gradient(
-      45deg,
-      rgba(255,255,255,0.05),
-      rgba(255,255,255,0.05) 1px,
-      transparent 1px,
-      transparent 20px
-    );
-  background-size: cover;
+  font-family:Roboto,Segoe UI,sans-serif;
+  background:black;
+  color:white;
 }
 
+/* HEADER */
 header{
   text-align:center;
   padding:30px 20px 10px;
 }
 
 header h1{
-  font-family: 'Oswald', 'Arial Black', sans-serif;
-  font-weight:700;
   font-size:3rem;
   margin:0;
-  color:white;
-  letter-spacing: 1px;
 }
 
+/* SEARCH */
 .search{
   max-width:420px;
-  margin:15px auto 30px;
+  margin:15px auto;
 }
-
 .search input{
   width:100%;
-  padding:12px 14px;
+  padding:12px;
   border-radius:14px;
   border:none;
-  background:var(--btn-bg);
+  background:#222;
   color:white;
-  font-family: 'Roboto', sans-serif;
-  font-size:14px;
 }
 
+/* TABS */
+.page-tabs{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin-bottom:25px;
+}
+
+.tab{
+  padding:10px 24px;
+  border-radius:999px;
+  border:2px solid #444;
+  background:#111;
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.tab.active{
+  background:white;
+  color:black;
+}
+
+/* GRID */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
@@ -80,32 +79,41 @@ header h1{
   margin:auto;
 }
 
+/* CARD */
 .card{
-  background: var(--card-bg);
+  background:var(--card-bg);
   border-radius:20px;
   padding:20px;
   box-shadow:0 8px 20px rgba(0,0,0,0.6);
-  transition:transform 0.25s,box-shadow 0.25s;
-  border: 2px solid #ffffff10;
+  border:2px solid #ffffff10;
 }
 
-.card:hover{
-  transform:translateY(-6px);
-  box-shadow:0 0 30px rgba(255,255,255,0.2);
+/* BLACKLISTED CARD */
+.card.blacklisted{
+  border:2px solid #ff3b3b;
+  box-shadow:
+    0 0 12px rgba(255,0,0,.6),
+    0 0 35px rgba(255,0,0,.4);
+  animation:redPulse 2s infinite;
 }
 
-.card-title {
+@keyframes redPulse{
+  0%{box-shadow:0 0 10px rgba(255,0,0,.3)}
+  50%{box-shadow:0 0 30px rgba(255,0,0,.9)}
+  100%{box-shadow:0 0 10px rgba(255,0,0,.3)}
+}
+
+/* CARD CONTENT */
+.card-title{
   display:flex;
   align-items:center;
   justify-content:center;
+  gap:10px;
   font-size:1.4rem;
   font-weight:bold;
-  color:white;
-  margin:10px 0;
-  gap:10px;
 }
 
-.card-title img {
+.card-title img{
   width:50px;
   height:50px;
   border-radius:50%;
@@ -115,8 +123,7 @@ header h1{
 .score{
   text-align:center;
   font-weight:800;
-  color:white;
-  margin:4px 0 12px;
+  margin:10px 0;
 }
 
 .pills{
@@ -129,132 +136,133 @@ header h1{
 .pill{
   padding:6px 12px;
   border-radius:999px;
+  background:#333;
   font-size:13px;
-  background:#333333;
-  color:white;
 }
 
-/* modal styles */
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.75);
-  display:none;
-  align-items:center;
-  justify-content:center;
+/* BLACKLIST TEXT */
+.blacklist-label{
+  text-align:center;
+  font-weight:900;
+  color:#ff3b3b;
+  margin-top:10px;
 }
 
-.modal.active{display:flex}
-
-.modal-box{
-  background:#1a1a1a;
-  border-radius:20px;
-  padding:24px;
-  width:90%;
-  max-width:480px;
-  color:white;
-  font-family:'Roboto', sans-serif;
-}
-
-.close{
-  float:right;
-  cursor:pointer;
-  opacity:.8;
+.blacklist-pill{
+  display:inline-block;
+  margin-top:8px;
+  padding:6px 14px;
+  border-radius:999px;
+  background:rgba(255,0,0,.15);
+  color:#ff5a5a;
+  font-weight:600;
 }
 </style>
-
 </head>
+
 <body>
 
 <header>
   <h1>SWD Tiers</h1>
+
   <div class="search">
     <input id="search" placeholder="Search by name...">
+  </div>
+
+  <div class="page-tabs">
+    <button class="tab active" onclick="switchPage('active')">ACTIVE</button>
+    <button class="tab" onclick="switchPage('blacklisted')">BLACKLISTED</button>
   </div>
 </header>
 
 <div class="grid" id="grid"></div>
 
-<div class="modal" id="modal">
-  <div class="modal-box">
-    <span class="close" onclick="closeModal()">✕</span>
-    <h2 id="m-name"></h2>
-    <p id="m-score"></p>
-    <div id="m-tests"></div>
-  </div>
-</div>
-
 <script>
-// Tier points
+// TIER POINTS
 const tierPoints={
   HT1:7,HT2:6,HT3:4,HT4:3,HT5:2,
   LT1:6.9,LT2:5,LT3:3,LT4:2,LT5:1
 };
 
-function normalize(t){ return t.toUpperCase().replace(/\s/g,""); }
 function points(t){
-  const n=normalize(t);
-  if(!n.includes("-")) return tierPoints[n] ?? 0;
-  const [a,b]=n.split("-");
-  return Math.round(((tierPoints[a]||0)+(tierPoints[b]||0))/2);
+  return tierPoints[t] ?? 0;
 }
 
-// Only SadbX and 432Q
+// BLACKLIST
+const blacklist=["enderbeacon","ravels80jno"];
+
+// PLAYERS
 const players=[
- {name:"SadbX",tests:[
-   {mode:"Mace",tier:"LT3"},
-   {mode:"Sword",tier:"HT4"}
- ]},
- {name:"432Q",tests:[
-   {mode:"Crystal",tier:"LT3"},
-   {mode:"Sword",tier:"LT4"}
- ]}
+  {
+    name:"SadbX",
+    tests:[
+      {mode:"Mace",tier:"LT3"},
+      {mode:"Sword",tier:"HT4"}
+    ]
+  },
+  {
+    name:"ravelS80JNO",
+    tests:[]
+  }
 ];
 
-// Calculate totals
-players.forEach(p=>p.total=p.tests.reduce((s,t)=>s+points(t.tier),0));
+players.forEach(p=>{
+  p.total=p.tests.reduce((s,t)=>s+points(t.tier),0);
+});
 
-const grid = document.getElementById("grid");
+let currentPage="active";
+const grid=document.getElementById("grid");
 
-function render(list){
-  grid.innerHTML = "";
-  list.forEach((p)=>{
-    const card = document.createElement("div");
-    card.className = "card";
+function render(){
+  const q=document.getElementById("search").value.toLowerCase();
+  grid.innerHTML="";
 
-    card.innerHTML = `
+  players.filter(p=>{
+    const isBL=blacklist.includes(p.name.toLowerCase());
+    if(currentPage==="active" && isBL) return false;
+    if(currentPage==="blacklisted" && !isBL) return false;
+    return p.name.toLowerCase().includes(q);
+  })
+  .forEach(p=>{
+    const isBL=blacklist.includes(p.name.toLowerCase());
+    const card=document.createElement("div");
+    card.className="card"+(isBL?" blacklisted":"");
+
+    card.innerHTML=`
       <div class="card-title">
-        <img src="https://mc-heads.net/avatar/${p.name}" alt="${p.name}">
+        <img src="https://mc-heads.net/avatar/${p.name}">
         ${p.name}
       </div>
-      <div class="score">${p.total} pts</div>
-      <div class="pills">
-        ${p.tests.map(t=>`<span class="pill">${t.mode} · ${t.tier}</span>`).join("")}
-      </div>
-    `;
 
-    card.onclick = ()=> openModal(p);
+      ${
+        isBL
+        ? `
+          <div class="blacklist-label">BLACKLISTED 🚫</div>
+          <div style="text-align:center">
+            <span class="blacklist-pill">Gone · BLACKLISTED</span>
+          </div>
+        `
+        : `
+          <div class="score">${p.total} pts</div>
+          <div class="pills">
+            ${p.tests.map(t=>`<span class="pill">${t.mode} · ${t.tier}</span>`).join("")}
+          </div>
+        `
+      }
+    `;
     grid.appendChild(card);
   });
 }
 
-render(players);
-
-// Search filter
-document.getElementById("search").oninput = e=>{
-  const q = e.target.value.toLowerCase();
-  render(players.filter(p=>p.name.toLowerCase().includes(q)));
-};
-
-function openModal(p){
-  document.getElementById("modal").classList.add("active");
-  document.getElementById("m-name").innerText = p.name;
-  document.getElementById("m-score").innerText = `Total: ${p.total} pts`;
-  document.getElementById("m-tests").innerHTML =
-    p.tests.map(t=>`<p><b>${t.mode}</b> — ${t.tier} (${points(t.tier)} pts)</p>`).join("");
+function switchPage(page){
+  currentPage=page;
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.querySelector(`[onclick="switchPage('${page}')"]`).classList.add("active");
+  render();
 }
 
-function closeModal(){ document.getElementById("modal").classList.remove("active"); }
+document.getElementById("search").oninput=render;
+render();
 </script>
 
 </body>
