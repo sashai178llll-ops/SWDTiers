@@ -81,7 +81,7 @@ header h1{
 
 /* CARD */
 .card{
-  background:var(--card-bg);
+  background:#1c1c1c;
   border-radius:20px;
   padding:20px;
   box-shadow:0 8px 20px rgba(0,0,0,0.6);
@@ -179,79 +179,90 @@ header h1{
 
 <script>
 // TIER POINTS
-const tierPoints={
-  HT1:7,HT2:6,HT3:4,HT4:3,HT5:2,
-  LT1:6.9,LT2:5,LT3:3,LT4:2,LT5:1
+const tierPoints = {
+  HT1:7, HT2:6, HT3:4, HT4:3, HT5:2,
+  LT1:6.9, LT2:5, LT3:3, LT4:2, LT5:1
 };
 
-function points(t){
-  return tierPoints[t] ?? 0;
-}
+const points = t => tierPoints[t] ?? 0;
 
 // BLACKLIST
-const blacklist=["enderbeacon","ravels80jno"];
+const blacklist = ["enderbeacon"];
 
 // PLAYERS
-const players=[
+const players = [
   {
-    name:"SadbX",
-    tests:[
-      {mode:"Mace",tier:"LT3"},
-      {mode:"Sword",tier:"HT4"}
+    name: "SadbX",
+    tests: [
+      { mode: "Mace", tier: "LT3" },
+      { mode: "Sword", tier: "HT4" }
     ]
   },
   {
-    name:"ravelS80JNO",
-    tests:[]
+    name: "432Q",
+    tests: [
+      { mode: "Sword", tier: "HT4" },
+      { mode: "Crystal", tier: "LT3" }
+    ]
+  },
+  {
+    name: "Enderbeacon",
+    tests: []
   }
 ];
 
+// CALCULATE TOTALS
 players.forEach(p=>{
-  p.total=p.tests.reduce((s,t)=>s+points(t.tier),0);
+  p.total = p.tests.reduce((s,t)=>s+points(t.tier),0);
 });
 
 let currentPage="active";
 const grid=document.getElementById("grid");
 
+function isBlacklisted(name){
+  return blacklist.includes(name.toLowerCase());
+}
+
 function render(){
   const q=document.getElementById("search").value.toLowerCase();
   grid.innerHTML="";
 
-  players.filter(p=>{
-    const isBL=blacklist.includes(p.name.toLowerCase());
-    if(currentPage==="active" && isBL) return false;
-    if(currentPage==="blacklisted" && !isBL) return false;
-    return p.name.toLowerCase().includes(q);
-  })
-  .forEach(p=>{
-    const isBL=blacklist.includes(p.name.toLowerCase());
-    const card=document.createElement("div");
-    card.className="card"+(isBL?" blacklisted":"");
+  players
+    .filter(p=>{
+      const bl=isBlacklisted(p.name);
+      if(currentPage==="active" && bl) return false;
+      if(currentPage==="blacklisted" && !bl) return false;
+      return p.name.toLowerCase().includes(q);
+    })
+    .forEach(p=>{
+      const bl=isBlacklisted(p.name);
+      const card=document.createElement("div");
+      card.className="card"+(bl?" blacklisted":"");
 
-    card.innerHTML=`
-      <div class="card-title">
-        <img src="https://mc-heads.net/avatar/${p.name}">
-        ${p.name}
-      </div>
+      card.innerHTML=`
+        <div class="card-title">
+          <img src="https://mc-heads.net/avatar/${p.name}">
+          ${p.name}
+        </div>
 
-      ${
-        isBL
-        ? `
-          <div class="blacklist-label">BLACKLISTED 🚫</div>
-          <div style="text-align:center">
-            <span class="blacklist-pill">Gone · BLACKLISTED</span>
-          </div>
-        `
-        : `
-          <div class="score">${p.total} pts</div>
-          <div class="pills">
-            ${p.tests.map(t=>`<span class="pill">${t.mode} · ${t.tier}</span>`).join("")}
-          </div>
-        `
-      }
-    `;
-    grid.appendChild(card);
-  });
+        ${
+          bl
+          ? `
+            <div class="blacklist-label">BLACKLISTED 🚫</div>
+            <div style="text-align:center">
+              <span class="blacklist-pill">Gone · BLACKLISTED</span>
+            </div>
+          `
+          : `
+            <div class="score">${p.total} pts</div>
+            <div class="pills">
+              ${p.tests.map(t=>`<span class="pill">${t.mode} · ${t.tier}</span>`).join("")}
+            </div>
+          `
+        }
+      `;
+      grid.appendChild(card);
+    });
 }
 
 function switchPage(page){
